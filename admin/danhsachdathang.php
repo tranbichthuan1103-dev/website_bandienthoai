@@ -4,17 +4,23 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['user'])) {
     header('location:../login/login.php');
     exit();
 }
+// Nếu truy cập trực tiếp (không qua admin.php include) thì redirect
+if (!defined('IN_ADMIN')) {
+    header('location:admin.php?page=dathang' . (isset($_GET['xemdon']) ? '&xemdon=' . intval($_GET['xemdon']) : ''));
+    exit();
+}
+header('Content-Type: text/html; charset=utf-8');
 if (!isset($p)) {
     include_once("../class/classtmdt.php");
     $p = new csdltmdt();
 }
 
-$TY_GIA = 25000;
+$TY_GIA = 24000;
 
 // Cập nhật trạng thái đơn hàng
 if (isset($_GET['capnhat']) && isset($_GET['iddh']) && isset($_GET['tt'])) {
     $p->capNhatTrangThaiDonHang(intval($_GET['iddh']), intval($_GET['tt']));
-    header('location:danhsachdathang.php');
+    header('location:admin.php?page=dathang');
     exit();
 }
 
@@ -32,15 +38,9 @@ $trangThaiLabel = array(0 => 'Chờ xử lý', 1 => 'Đang giao', 2 => 'Đã gia
 $trangThaiColor = array(0 => '#e6a817', 1 => '#2196F3', 2 => '#4caf50');
 ?>
 <style>
-    table { border-collapse: collapse; width: 97%; margin: 10px auto; }
-    th, td { border: 1px solid #ccc; padding: 7px; text-align: center; font-size: 13px; }
-    th { background: #f0f0f0; }
-    img { max-width: 55px; }
-    .trangthai { font-weight: bold; padding: 2px 8px; border-radius: 4px; color: #fff; font-size: 12px; }
-    select.tt-select { font-size: 12px; padding: 2px; }
-    .box-tongtke { background: #fff8e1; border: 1px solid #f0c040; border-radius: 6px;
-                   padding: 12px 20px; width: 97%; margin: 10px auto; box-sizing: border-box; }
-    .box-tongtke .so { font-size: 20px; font-weight: bold; color: #c00; }
+    table { border-collapse: collapse; width: 95%; margin: 10px auto; }
+    td, th { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    img { max-width: 80px; }
 </style>
 
 <h3 align="center">DANH SÁCH ĐẶT HÀNG</h3>
@@ -49,11 +49,8 @@ $trangThaiColor = array(0 => '#e6a817', 1 => '#2196F3', 2 => '#4caf50');
 $tongTatCa = 0;
 foreach ($danhsach as $dh) $tongTatCa += $dh['tongtien'];
 ?>
-<div class="box-tongtke">
-    <b>Tổng số đơn:</b> <span class="so"><?php echo count($danhsach); ?></span> &nbsp;&nbsp;|&nbsp;&nbsp;
-    <b>Tổng doanh thu:</b>
-    <span class="so"><?php echo number_format($tongTatCa * $TY_GIA, 0, ',', '.'); ?> VNĐ</span>
-</div>
+<p><b>Tổng số đơn:</b> <?php echo count($danhsach); ?> &nbsp;|&nbsp;
+   <b>Tổng doanh thu:</b> <?php echo number_format($tongTatCa * $TY_GIA, 0, ',', '.'); ?> VNĐ</p>
 
 <?php if (empty($danhsach)): ?>
     <p align="center">Chưa có đơn hàng nào.</p>
@@ -84,9 +81,8 @@ foreach ($danhsach as $dh) $tongTatCa += $dh['tongtien'];
         <td><?php echo $dh['ngaydathang']; ?></td>
         <td><?php echo number_format($dh['tongtien'] * $TY_GIA, 0, ',', '.'); ?> VNĐ</td>
         <td>
-            <span class="trangthai" style="background:<?php echo $color; ?>"><?php echo $label; ?></span>
-            <br>
-            <select class="tt-select" onchange="window.location='danhsachdathang.php?capnhat=1&iddh=<?php echo $dh['iddh']; ?>&tt='+this.value">
+            <?php echo $label; ?><br>
+            <select onchange="window.location='danhsachdathang.php?capnhat=1&iddh=<?php echo $dh['iddh']; ?>&tt='+this.value">
                 <option value="">-- Đổi --</option>
                 <?php foreach ($trangThaiLabel as $val => $lbl): ?>
                     <option value="<?php echo $val; ?>" <?php if ($tt == $val) echo 'selected'; ?>>
@@ -95,7 +91,7 @@ foreach ($danhsach as $dh) $tongTatCa += $dh['tongtien'];
                 <?php endforeach; ?>
             </select>
         </td>
-        <td><a href="danhsachdathang.php?xemdon=<?php echo $dh['iddh']; ?>">Xem</a></td>
+        <td><a href="admin.php?page=dathang&xemdon=<?php echo $dh['iddh']; ?>">Xem</a></td>
     </tr>
     <?php endforeach; ?>
 </table>

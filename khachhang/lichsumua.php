@@ -41,16 +41,8 @@ if (isset($_GET['xemdon'])) {
     <link rel="stylesheet" type="text/css" href="../css/css.css">
     <style>
         table { border-collapse: collapse; width: 95%; margin: 10px auto; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background: #f0f0f0; }
-        img { max-width: 60px; }
-        .tong-tket { font-weight: bold; font-size: 16px; color: #c00;
-                     text-align: right; width: 95%; margin: 6px auto; }
-        .trangthai { font-weight: bold; padding: 3px 8px; border-radius: 4px; color: #fff; }
-        .box-tongtke { background: #fff8e1; border: 1px solid #f0c040; border-radius: 6px;
-                       padding: 14px 24px; width: 95%; margin: 12px auto; box-sizing: border-box; }
-        .box-tongtke h4 { margin: 0 0 8px; }
-        .box-tongtke .so { font-size: 22px; font-weight: bold; color: #c00; }
+        td, th { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        img { max-width: 80px; }
     </style>
 </head>
 <body>
@@ -82,21 +74,8 @@ if (isset($_GET['xemdon'])) {
                 $tongTatCa += $dh['tongtien'];
             }
             ?>
-            <div class="box-tongtke">
-                <h4>THỐNG KÊ TỔNG TIỀN ĐÃ MUA</h4>
-                <table width="100%" style="border:none; width:auto; margin:0;">
-                    <tr>
-                        <td style="border:none; padding:4px 20px 4px 0;">Tổng số đơn hàng:</td>
-                        <td style="border:none;" class="so"><?php echo $soDonHang; ?> đơn</td>
-                    </tr>
-                    <tr>
-                        <td style="border:none; padding:4px 20px 4px 0;">Tổng tiền đã chi:</td>
-                        <td style="border:none;" class="so">
-                            <?php echo number_format($tongTatCa * $TY_GIA, 0, ',', '.'); ?> VNĐ
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <p><b>Tổng số đơn hàng:</b> <?php echo $soDonHang; ?> đơn &nbsp;|&nbsp;
+               <b>Tổng tiền đã chi:</b> <?php echo number_format($tongTatCa * $TY_GIA, 0, ',', '.'); ?> VNĐ</p>
 
             <?php if (empty($danhsachDH)): ?>
                 <p align="center">Bạn chưa có đơn hàng nào. <a href="../index.php">Mua sắm ngay</a></p>
@@ -119,11 +98,7 @@ if (isset($_GET['xemdon'])) {
                     <td>#<?php echo $dh['iddh']; ?></td>
                     <td><?php echo $dh['ngaydathang']; ?></td>
                     <td><?php echo number_format($dh['tongtien'] * $TY_GIA, 0, ',', '.'); ?> VNĐ</td>
-                    <td>
-                        <span class="trangthai" style="background:<?php echo $color; ?>">
-                            <?php echo $label; ?>
-                        </span>
-                    </td>
+                    <td><?php echo $label; ?></td>
                     <td><a href="lichsumua.php?xemdon=<?php echo $dh['iddh']; ?>">Xem</a></td>
                 </tr>
                 <?php endforeach; ?>
@@ -160,9 +135,7 @@ if (isset($_GET['xemdon'])) {
                 </tr>
                 <?php endforeach; ?>
             </table>
-            <div class="tong-tket">
-                Tổng đơn: <?php echo number_format($tongDon * $TY_GIA, 0, ',', '.'); ?> VNĐ
-            </div>
+            <p><b>Tổng đơn: <?php echo number_format($tongDon * $TY_GIA, 0, ',', '.'); ?> VNĐ</b></p>
             <?php endif; ?>
             <?php endif; ?>
 

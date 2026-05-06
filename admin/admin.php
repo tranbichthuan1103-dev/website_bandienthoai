@@ -11,6 +11,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user']) && isset($_SESSION['pass'
 ?>
 <?php
 require_once("../class/classtmdt.php");
+define('IN_ADMIN', true);
 $p = new csdltmdt();
 ?>
 <!doctype html>

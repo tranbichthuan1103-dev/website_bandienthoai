@@ -37,17 +37,9 @@ $TY_GIA    = 25000;
     <title>Xác Nhận Đặt Hàng</title>
     <link rel="stylesheet" type="text/css" href="../css/css.css">
     <style>
-        table { border-collapse: collapse; width: 90%; margin: 10px auto; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background: #f0f0f0; }
-        img { max-width: 70px; }
-        .tong { font-weight: bold; font-size: 15px; text-align: right; width: 90%; margin: 8px auto; }
-        .form-diachi { width: 90%; margin: 15px auto; }
-        .form-diachi label { font-weight: bold; display: block; margin-bottom: 5px; }
-        .form-diachi input[type=text] { width: 100%; padding: 6px; box-sizing: border-box; font-size: 14px; }
-        .btn-datHang { background: #e44; color: #fff; padding: 8px 20px; border: none; font-size: 15px;
-                       cursor: pointer; border-radius: 4px; }
-        .loi { color: red; text-align: center; font-weight: bold; }
+        table { border-collapse: collapse; width: 95%; margin: 10px auto; }
+        td, th { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        img { max-width: 80px; }
     </style>
 </head>
 <body>
@@ -65,7 +57,7 @@ $TY_GIA    = 25000;
             <h3 align="center">XÁC NHẬN ĐẶT HÀNG</h3>
 
             <?php if (isset($loi)): ?>
-                <p class="loi"><?php echo $loi; ?></p>
+                <p><?php echo $loi; ?></p>
             <?php endif; ?>
 
             <?php if (empty($danhsach)): ?>
@@ -96,23 +88,19 @@ $TY_GIA    = 25000;
                 </tr>
                 <?php endforeach; ?>
             </table>
-            <div class="tong">
-                Tổng cộng: <?php echo number_format($tongtien * $TY_GIA, 0, ',', '.'); ?> VNĐ
-            </div>
+            <p><b>Tổng cộng: <?php echo number_format($tongtien * $TY_GIA, 0, ',', '.'); ?> VNĐ</b></p>
 
             <form method="post" action="">
-                <div class="form-diachi">
-                    <label>Địa chỉ nhận hàng:</label>
-                    <input type="text" name="diachinhanhang"
-                           value="<?php echo isset($khachhang['diachinhanhang']) ? htmlspecialchars($khachhang['diachinhanhang']) : ''; ?>"
-                           placeholder="Nhập địa chỉ nhận hàng" />
-                    <br><br>
-                    <div align="center">
-                        <input type="submit" name="datHang" class="btn-datHang" value="Xác nhận đặt hàng" />
-                        &nbsp;&nbsp;
-                        <a href="giohang.php">Quay lại giỏ hàng</a>
-                    </div>
-                </div>
+                <p>
+                    <label>Địa chỉ nhận hàng:</label><br>
+                    <input type="text" name="diachinhanhang" size="60"
+                           value="<?php echo isset($khachhang['diachinhanhang']) ? htmlspecialchars($khachhang['diachinhanhang']) : ''; ?>" />
+                </p>
+                <p>
+                    <input type="submit" name="datHang" value="Xác nhận đặt hàng" />
+                    &nbsp;&nbsp;
+                    <a href="giohang.php">Quay lại giỏ hàng</a>
+                </p>
             </form>
 
             <?php endif; ?>

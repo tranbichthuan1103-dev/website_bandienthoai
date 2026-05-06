@@ -24,8 +24,20 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
     <div id="container">
         <div id="banner">BANNER</div>
         <div id="main">
-            <div id="left">
+            
+			<div id="right">
+				<?php
+				if (isset($_REQUEST['id'])) {
+					$layid = $_REQUEST['id'];
+					$p->xemdssanpham("select * from sanpham where idcty='$layid' order by gia asc");
+				} else {
+					$p->xemdssanpham("select * from sanpham order by gia asc");
+				}
 
+				?>
+			</div>
+            <div id="left">
+                <H3 align="center">MENU</H3>
                 <ul style="list-style:none; padding:0; margin:0;">
                     <li><a href="index.php">Trang Chủ</a></li>
                     <li>
@@ -65,17 +77,6 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
 
 			</div>
 
-			<div id="right">
-				<?php
-				if (isset($_REQUEST['id'])) {
-					$layid = $_REQUEST['id'];
-					$p->xemdssanpham("select * from sanpham where idcty='$layid' order by gia asc");
-				} else {
-					$p->xemdssanpham("select * from sanpham order by gia asc");
-				}
-
-				?>
-			</div>
 		</div>
 
 		<div id="footer">FOOTER</div>

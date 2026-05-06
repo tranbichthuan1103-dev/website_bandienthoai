@@ -37,12 +37,10 @@ $danhsach = $p->xemChiTietGiohang($idkh);
     <title>Giỏ Hàng</title>
     <link rel="stylesheet" type="text/css" href="../css/css.css">
     <style>
-        table { border-collapse: collapse; width: 90%; margin: 20px auto; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background: #f0f0f0; }
+        table { border-collapse: collapse; width: 95%; margin: 10px auto; }
+        td, th { border: 1px solid #ccc; padding: 6px; text-align: left; }
         img { max-width: 80px; }
-        .tong { font-weight: bold; font-size: 16px; text-align: right; margin: 10px auto; width: 90%; }
-        input[type=text] { width: 45px; text-align: center; }
+        input[type=text] { width: 45px; }
     </style>
 </head>
 <body>
@@ -92,13 +90,13 @@ $danhsach = $p->xemChiTietGiohang($idkh);
                 </tr>
                 <?php endforeach; ?>
             </table>
-            <div class="tong">Tổng cộng: <?php echo $tongtien; ?> USD</div>
+            <p><b>Tổng cộng: <?php echo $tongtien; ?> USD</b></p>
             <div align="center" style="margin:10px;">
                 <input type="submit" name="capnhat" value="Cập nhật giỏ hàng" />
                 &nbsp;&nbsp;
                 <a href="../index.php">Tiếp tục mua sắm</a>
                 &nbsp;&nbsp;
-                <a href="xacnhandathang.php" style="background:#e44; color:#fff; padding:6px 14px; text-decoration:none; border-radius:4px;">Tiến hành đặt hàng &raquo;</a>
+                <a href="xacnhandathang.php">Tiến hành đặt hàng &raquo;</a>
             </div>
             </form>
             <?php endif; ?>
