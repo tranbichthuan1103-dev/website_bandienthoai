@@ -49,11 +49,19 @@ if (!isset($p)) {
     $idcty = $row['idcty'];
     $hinhcu = $row['hinh'];
     ?>
+  <h2 align="center">QUẢN LÝ SẢN PHẨM</h2>
 
-    <h3 align="center">SỬA SẢN PHẨM</h3>
+  <div style="text-align:center; margin-bottom:20px;">
+    <a href="./admin.php">Danh sách</a> |
+    <a href="./admin.php?page=them">Thêm</a> 
+  </div>
 
-    <form method="post" enctype="multipart/form-data">
-        <table border="1" width="800" align="center">
+  <hr>
+  <form method="post" enctype="multipart/form-data">
+      <table width="800" border="1" align="center" cellpadding="6" cellspacing="0">
+            <tr align="center">
+              <td colspan="2">SỬA SẢN PHẨM</td>
+            </tr>
             <tr>
                 <td>Nhà sản xuất</td>
                 <td>
@@ -77,22 +85,22 @@ if (!isset($p)) {
 
             <tr>
                 <td>Tên sản phẩm</td>
-                <td><input type="text" name="txtten" value="<?php echo $ten; ?>"></td>
+                <td><input name="txtten" type="text" value="<?php echo $ten; ?>" size="50"></td>
             </tr>
 
             <tr>
                 <td>Giá</td>
-                <td><input type="text" name="txtgia" value="<?php echo $gia; ?>"></td>
+                <td><input name="txtgia" type="text" value="<?php echo $gia; ?>" size="50"></td>
             </tr>
 
             <tr>
                 <td>Giảm giá</td>
-                <td><input type="text" name="txtgiamgia" value="<?php echo $giamgia; ?>"></td>
+                <td><input name="txtgiamgia" type="text" value="<?php echo $giamgia; ?>" size="50"></td>
             </tr>
 
             <tr>
                 <td>Mô tả</td>
-                <td><textarea name="txtmota"><?php echo $mota; ?></textarea></td>
+                <td><textarea name="txtmota" cols="55" rows="10"><?php echo $mota; ?></textarea></td>
             </tr>
 
             <tr>
@@ -120,7 +128,7 @@ if (!isset($p)) {
         $ten = $_POST['txtten'];
         $gia = $_POST['txtgia'];
         $giamgia = $_POST['txtgiamgia'];
-        $mota = $_POST['txtmota'];
+        $mota = trim($_POST['txtmota']);
         $congty = $_POST['congty'];
 
         $name = $_FILES['myfile']['name'];

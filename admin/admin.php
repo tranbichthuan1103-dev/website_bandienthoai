@@ -31,9 +31,7 @@ $p = new csdltmdt();
 
   <div style="text-align:center; margin-bottom:20px;">
     <a href="?page=ds">Danh sách</a> |
-    <a href="?page=them">Thêm</a> |
-    <a href="?page=sua">Sửa</a> |
-    <a href="?page=xoa">Xóa</a>
+    <a href="?page=them">Thêm</a> 
   </div>
 
   <hr>
@@ -46,16 +44,9 @@ $p = new csdltmdt();
       include("themsanpham.php");
       break;
 
-    case 'sua':
-      include("suasanpham.php");
-      break;
-
-    case 'xoa':
-      include("xoasanpham.php");
-      break;
-
-    default:
+    case 'ds':
       include("danhsachsanpham.php"); 
+      break;
   }
   ?>
 </body>

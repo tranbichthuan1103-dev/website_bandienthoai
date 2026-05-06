@@ -77,7 +77,7 @@ if (!isset($p)) {
                 $ten = $_REQUEST['txtten'];
                 $gia = $_REQUEST['txtgia'];
                 $giamgia = $_REQUEST['txtgiamgia'];
-                $mota = $_REQUEST['txtmota'];
+                $mota = trim($_REQUEST['txtmota']);
                 $congty = $_REQUEST['congty'];
                 $name = $_FILES['myfile']['name'];
                 $tmp_name = $_FILES['myfile']['tmp_name'];

@@ -9,7 +9,8 @@ class csdltmdt
 			exit();
 		} else {
 			mysql_select_db('tmdt_db');
-			mysql_query("SET NAME UTF8");
+			mysql_query("SET NAMES utf8");
+			mysql_query("SET CHARACTER SET utf8");
 			return $con;
 		}
 	}
@@ -91,7 +92,17 @@ class csdltmdt
 		}
 		mysql_close($link);
 	}
-
+	public function chitietsanpham($idsp)
+	{
+		$link = $this->connect();
+		$idsp = intval($idsp);
+		$ketqua = mysql_query("SELECT * FROM sanpham WHERE idsp='$idsp' limit 1", $link);
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			return mysql_fetch_array($ketqua);
+		} else {
+			return 0;
+		}
+	}
 
 }
 ?>

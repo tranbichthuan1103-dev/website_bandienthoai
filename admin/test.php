@@ -5,7 +5,7 @@
 <title>Untitled Document</title>
 </head>
 <?php 
-echo md5('123456');
+echo md5('thuan123');
 ?>
 <body>
 </body>

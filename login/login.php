@@ -6,7 +6,7 @@ $p= new login();
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Login Admin</title>
 </head>
 
 <body>
