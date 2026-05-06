@@ -10,42 +10,6 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
     $q = new login();
     $q->confirmloginkhachhang($_SESSION['idkh'], $_SESSION['email'], $_SESSION['pass']);
 }
-
-// Khởi tạo giỏ hàng nếu chưa có
-if (!isset($_SESSION['giohang'])) {
-    $_SESSION['giohang'] = array();
-}
-
-// Xử lý thêm sản phẩm vào giỏ hàng
-if (isset($_REQUEST['addtocart'])) {
-    $idsp = intval($_REQUEST['idsp']);
-    $soluong = isset($_REQUEST['soluong']) ? intval($_REQUEST['soluong']) : 1;
-    
-    if ($idsp > 0 && $soluong > 0) {
-        // Kiểm tra sản phẩm đã có trong giỏ hay chưa
-        $found = false;
-        foreach ($_SESSION['giohang'] as $key => $item) {
-            if ($item['idsp'] == $idsp) {
-                $_SESSION['giohang'][$key]['soluong'] += $soluong;
-                $found = true;
-                break;
-            }
-        }
-        
-        // Nếu sản phẩm chưa có, thêm mới
-        if (!$found) {
-            $_SESSION['giohang'][] = array(
-                'idsp' => $idsp,
-                'tensp' => $_REQUEST['tensp'],
-                'gia' => floatval($_REQUEST['gia']),
-                'hinh' => $_REQUEST['hinh'],
-                'soluong' => $soluong
-            );
-        }
-        
-        echo '<script>alert("Thêm vào giỏ hàng thành công!"); window.location="index.php";</script>';
-    }
-}
 ?>
 <!doctype html>
 <html>
@@ -68,8 +32,9 @@ if (isset($_REQUEST['addtocart'])) {
                         <a href="khachhang/giohang.php">
                             Giỏ Hàng 
                             <?php 
-                            if (isset($_SESSION['giohang']) && count($_SESSION['giohang']) > 0) {
-                                echo '(' . count($_SESSION['giohang']) . ')';
+                            if (isset($_SESSION['idkh'])) {
+                                $sosp = $p->demSanPhamTrongGiohang($_SESSION['idkh']);
+                                if ($sosp > 0) echo '(' . $sosp . ')';
                             }
                             ?>
                         </a>

@@ -104,5 +104,102 @@ class csdltmdt
 		}
 	}
 
+	// Lấy hoặc tạo giỏ hàng đang hoạt động (trangthai=0) cho khách hàng
+	public function layGiohangHoatDong($idkh)
+	{
+		$link = $this->connect();
+		$idkh = intval($idkh);
+		$ketqua = mysql_query("SELECT idgiohang FROM giohang WHERE idkh='$idkh' AND trangthai=0 LIMIT 1", $link);
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			$row = mysql_fetch_array($ketqua);
+			return $row['idgiohang'];
+		} else {
+			mysql_query("INSERT INTO giohang (idkh, trangthai) VALUES ('$idkh', 0)", $link);
+			return mysql_insert_id($link);
+		}
+	}
+
+	// Thêm sản phẩm vào giỏ hàng, nếu đã có thì cộng số lượng
+	public function themSanPhamVaoGiohang($idkh, $idsp, $soluong, $gia)
+	{
+		$link = $this->connect();
+		$idgiohang = $this->layGiohangHoatDong($idkh);
+		$idsp    = intval($idsp);
+		$soluong = intval($soluong);
+		$gia     = floatval($gia);
+		$ketqua = mysql_query("SELECT idchitiet, soluong FROM chitietgiohang WHERE idgiohang='$idgiohang' AND idsp='$idsp' LIMIT 1", $link);
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			$row = mysql_fetch_array($ketqua);
+			$soluongmoi = $row['soluong'] + $soluong;
+			$idchitiet  = $row['idchitiet'];
+			mysql_query("UPDATE chitietgiohang SET soluong='$soluongmoi' WHERE idchitiet='$idchitiet'", $link);
+		} else {
+			mysql_query("INSERT INTO chitietgiohang (idgiohang, idsp, soluong, gia) VALUES ('$idgiohang', '$idsp', '$soluong', '$gia')", $link);
+		}
+		return 1;
+	}
+
+	// Lấy danh sách sản phẩm trong giỏ hàng của khách hàng
+	public function xemChiTietGiohang($idkh)
+	{
+		$link = $this->connect();
+		$idkh = intval($idkh);
+		$sql = "SELECT ctg.idchitiet, ctg.idsp, ctg.soluong, ctg.gia, sp.tensp, sp.hinh
+				FROM chitietgiohang ctg
+				INNER JOIN giohang gh ON ctg.idgiohang = gh.idgiohang
+				INNER JOIN sanpham sp ON ctg.idsp = sp.idsp
+				WHERE gh.idkh='$idkh' AND gh.trangthai=0";
+		$ketqua = mysql_query($sql, $link);
+		$result = array();
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			while ($row = mysql_fetch_array($ketqua)) {
+				$result[] = $row;
+			}
+		}
+		return $result;
+	}
+
+	// Xóa 1 sản phẩm khỏi giỏ hàng
+	public function xoaSanPhamKhoiGiohang($idchitiet)
+	{
+		$link = $this->connect();
+		$idchitiet = intval($idchitiet);
+		if (mysql_query("DELETE FROM chitietgiohang WHERE idchitiet='$idchitiet'", $link)) {
+			return 1;
+		}
+		return 0;
+	}
+
+	// Cập nhật số lượng sản phẩm trong giỏ hàng
+	public function capNhatSoluongGiohang($idchitiet, $soluong)
+	{
+		$link = $this->connect();
+		$idchitiet = intval($idchitiet);
+		$soluong   = intval($soluong);
+		if ($soluong <= 0) {
+			return $this->xoaSanPhamKhoiGiohang($idchitiet);
+		}
+		if (mysql_query("UPDATE chitietgiohang SET soluong='$soluong' WHERE idchitiet='$idchitiet'", $link)) {
+			return 1;
+		}
+		return 0;
+	}
+
+	// Đếm số dòng sản phẩm trong giỏ hàng (để hiện số lượng trên menu)
+	public function demSanPhamTrongGiohang($idkh)
+	{
+		$link = $this->connect();
+		$idkh = intval($idkh);
+		$sql = "SELECT COUNT(*) as total FROM chitietgiohang ctg
+				INNER JOIN giohang gh ON ctg.idgiohang = gh.idgiohang
+				WHERE gh.idkh='$idkh' AND gh.trangthai=0";
+		$ketqua = mysql_query($sql, $link);
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			$row = mysql_fetch_array($ketqua);
+			return $row['total'];
+		}
+		return 0;
+	}
+
 }
 ?>
