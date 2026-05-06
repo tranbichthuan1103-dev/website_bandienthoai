@@ -30,8 +30,9 @@ $p = new csdltmdt();
   <h2 align="center">QUẢN LÝ SẢN PHẨM</h2>
 
   <div style="text-align:center; margin-bottom:20px;">
-    <a href="?page=ds">Danh sách</a> |
-    <a href="?page=them">Thêm</a> 
+    <a href="?page=ds">Danh sách SP</a> |
+    <a href="?page=them">Thêm SP</a> |
+    <a href="?page=dathang">Đặt hàng</a>
   </div>
 
   <hr>
@@ -45,7 +46,11 @@ $p = new csdltmdt();
       break;
 
     case 'ds':
-      include("danhsachsanpham.php"); 
+      include("danhsachsanpham.php");
+      break;
+
+    case 'dathang':
+      include("danhsachdathang.php");
       break;
   }
   ?>

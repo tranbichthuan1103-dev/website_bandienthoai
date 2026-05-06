@@ -201,5 +201,131 @@ class csdltmdt
 		return 0;
 	}
 
+	// Lấy thông tin khách hàng theo idkh
+	public function layThongTinKhachHang($idkh)
+	{
+		$link = $this->connect();
+		$idkh = intval($idkh);
+		$ketqua = mysql_query("SELECT * FROM khachhang WHERE idkh='$idkh' LIMIT 1", $link);
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			return mysql_fetch_array($ketqua);
+		}
+		return 0;
+	}
+
+	// Xác nhận đặt hàng: tạo đơn hàng từ giỏ hàng đang active
+	public function xacNhanDatHang($idkh, $diachinhanhang)
+	{
+		$link = $this->connect();
+		$idkh = intval($idkh);
+		$diachinhanhang = mysql_real_escape_string($diachinhanhang, $link);
+
+		// Lấy giỏ hàng đang active
+		$ketqua = mysql_query("SELECT idgiohang FROM giohang WHERE idkh='$idkh' AND trangthai=0 LIMIT 1", $link);
+		if (!$ketqua || mysql_num_rows($ketqua) == 0) return 0;
+		$row = mysql_fetch_array($ketqua);
+		$idgiohang = $row['idgiohang'];
+
+		// Kiểm tra giỏ hàng có sản phẩm không
+		$ctg = mysql_query("SELECT * FROM chitietgiohang WHERE idgiohang='$idgiohang'", $link);
+		if (!$ctg || mysql_num_rows($ctg) == 0) return 0;
+
+		// Cập nhật địa chỉ nhận hàng
+		mysql_query("UPDATE khachhang SET diachinhanhang='$diachinhanhang' WHERE idkh='$idkh'", $link);
+
+		// Tạo đơn hàng mới
+		mysql_query("INSERT INTO dathang (idkh, ngaydathang, trangthai) VALUES ('$idkh', NOW(), 0)", $link);
+		$iddh = mysql_insert_id($link);
+
+		// Chép chi tiết giỏ hàng vào dathang_chitiet
+		while ($item = mysql_fetch_array($ctg)) {
+			$idsp    = intval($item['idsp']);
+			$soluong = intval($item['soluong']);
+			$dongia  = floatval($item['gia']);
+			mysql_query("INSERT INTO dathang_chitiet (iddh, idsp, soluong, dongia, giamgia)
+						 VALUES ('$iddh', '$idsp', '$soluong', '$dongia', 0)", $link);
+		}
+
+		// Đánh dấu giỏ hàng đã đặt
+		mysql_query("UPDATE giohang SET trangthai=1 WHERE idgiohang='$idgiohang'", $link);
+
+		return $iddh;
+	}
+
+	// Lịch sử mua hàng của khách hàng (tổng tiền theo USD, hiển thị sẽ đổi sang VND)
+	public function xemLichSuMuaHang($idkh)
+	{
+		$link = $this->connect();
+		$idkh = intval($idkh);
+		$sql = "SELECT dh.iddh, dh.ngaydathang, dh.trangthai,
+					   SUM(dc.soluong * dc.dongia) as tongtien
+				FROM dathang dh
+				INNER JOIN dathang_chitiet dc ON dh.iddh = dc.iddh
+				WHERE dh.idkh='$idkh'
+				GROUP BY dh.iddh
+				ORDER BY dh.ngaydathang DESC";
+		$ketqua = mysql_query($sql, $link);
+		$result = array();
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			while ($row = mysql_fetch_array($ketqua)) {
+				$result[] = $row;
+			}
+		}
+		return $result;
+	}
+
+	// Chi tiết sản phẩm trong 1 đơn hàng
+	public function xemChiTietDonHang($iddh)
+	{
+		$link = $this->connect();
+		$iddh = intval($iddh);
+		$sql = "SELECT dc.idsp, dc.soluong, dc.dongia, sp.tensp, sp.hinh
+				FROM dathang_chitiet dc
+				INNER JOIN sanpham sp ON dc.idsp = sp.idsp
+				WHERE dc.iddh='$iddh'";
+		$ketqua = mysql_query($sql, $link);
+		$result = array();
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			while ($row = mysql_fetch_array($ketqua)) {
+				$result[] = $row;
+			}
+		}
+		return $result;
+	}
+
+	// Admin: danh sách tất cả đơn hàng
+	public function xemDSDatHangAdmin()
+	{
+		$link = $this->connect();
+		$sql = "SELECT dh.iddh, dh.ngaydathang, dh.trangthai,
+					   kh.hodem, kh.ten, kh.email, kh.dienthoai, kh.diachinhanhang,
+					   SUM(dc.soluong * dc.dongia) as tongtien
+				FROM dathang dh
+				INNER JOIN khachhang kh ON dh.idkh = kh.idkh
+				INNER JOIN dathang_chitiet dc ON dh.iddh = dc.iddh
+				GROUP BY dh.iddh
+				ORDER BY dh.ngaydathang DESC";
+		$ketqua = mysql_query($sql, $link);
+		$result = array();
+		if ($ketqua && mysql_num_rows($ketqua) > 0) {
+			while ($row = mysql_fetch_array($ketqua)) {
+				$result[] = $row;
+			}
+		}
+		return $result;
+	}
+
+	// Admin: cập nhật trạng thái đơn hàng
+	public function capNhatTrangThaiDonHang($iddh, $trangthai)
+	{
+		$link = $this->connect();
+		$iddh      = intval($iddh);
+		$trangthai = intval($trangthai);
+		if (mysql_query("UPDATE dathang SET trangthai='$trangthai' WHERE iddh='$iddh'", $link)) {
+			return 1;
+		}
+		return 0;
+	}
+
 }
 ?>

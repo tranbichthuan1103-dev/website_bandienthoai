@@ -46,6 +46,8 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
                             $ten = isset($_SESSION['ten']) ? $_SESSION['ten'] : '';
                             echo '<a href="index.php"> Xin chào ' . $hodem . ' ' . $ten . '</a>';
                             echo '<br>';
+                            echo '<a href="khachhang/lichsumua.php">Lịch sử mua hàng</a>';
+                            echo '<br>';
                             echo '<a href="login/logout.php">Đăng xuất</a>';
                         } else {
                             echo '<a href="./login/loginkhachhang.php">Đăng nhập khách hàng</a>';

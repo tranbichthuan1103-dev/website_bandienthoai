@@ -53,6 +53,7 @@ $danhsach = $p->xemChiTietGiohang($idkh);
             <ul style="list-style:none; padding:0; margin:0;">
                 <li><a href="../index.php">Trang Chủ</a></li>
                 <li><strong>Giỏ Hàng</strong></li>
+                <li><a href="lichsumua.php">Lịch sử mua hàng</a></li>
                 <li><a href="../login/logout.php">Đăng xuất</a></li>
             </ul>
         </div>
@@ -96,6 +97,8 @@ $danhsach = $p->xemChiTietGiohang($idkh);
                 <input type="submit" name="capnhat" value="Cập nhật giỏ hàng" />
                 &nbsp;&nbsp;
                 <a href="../index.php">Tiếp tục mua sắm</a>
+                &nbsp;&nbsp;
+                <a href="xacnhandathang.php" style="background:#e44; color:#fff; padding:6px 14px; text-decoration:none; border-radius:4px;">Tiến hành đặt hàng &raquo;</a>
             </div>
             </form>
             <?php endif; ?>
