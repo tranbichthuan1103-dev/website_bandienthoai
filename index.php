@@ -25,17 +25,6 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
         <div id="banner">BANNER</div>
         <div id="main">
             
-			<div id="right">
-				<?php
-				if (isset($_REQUEST['id'])) {
-					$layid = $_REQUEST['id'];
-					$p->xemdssanpham("select * from sanpham where idcty='$layid' order by gia asc");
-				} else {
-					$p->xemdssanpham("select * from sanpham order by gia asc");
-				}
-
-				?>
-			</div>
             <div id="left">
                 <H3 align="center">MENU</H3>
                 <ul style="list-style:none; padding:0; margin:0;">
@@ -53,7 +42,15 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
                     </li>
                     <li>
                         <?php
-                        if (isset($_SESSION['idkh'])) {
+                        if (isset($_SESSION['phanquyen']) && $_SESSION['phanquyen'] == 1) {
+                            $hodem = isset($_SESSION['hodem']) ? $_SESSION['hodem'] : '';
+                            $ten = isset($_SESSION['ten']) ? $_SESSION['ten'] : '';
+                            echo '<a href="admin/admin.php"> Xin chào ' . $hodem . ' ' . $ten . ' (Admin)</a>';
+                            echo '<br>';
+                            echo '<a href="admin/admin.php">Trang quản trị</a>';
+                            echo '<br>';
+                            echo '<a href="login/logout.php">Đăng xuất</a>';
+                        } else if (isset($_SESSION['idkh'])) {
                             $hodem = isset($_SESSION['hodem']) ? $_SESSION['hodem'] : '';
                             $ten = isset($_SESSION['ten']) ? $_SESSION['ten'] : '';
                             echo '<a href="index.php"> Xin chào ' . $hodem . ' ' . $ten . '</a>';
@@ -62,7 +59,7 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
                             echo '<br>';
                             echo '<a href="login/logout.php">Đăng xuất</a>';
                         } else {
-                            echo '<a href="./login/loginkhachhang.php">Đăng nhập khách hàng</a>';
+                            echo '<a href="./login/login.php">Đăng nhập</a>';
                         }
                         ?>
                     </li>
@@ -76,8 +73,20 @@ if (isset($_SESSION['idkh']) && isset($_SESSION['email']) && isset($_SESSION['pa
 				</ul>
 
 			</div>
+            <div id="right">
+				<?php
+				if (isset($_REQUEST['id'])) {
+					$layid = $_REQUEST['id'];
+					$p->xemdssanpham("select * from sanpham where idcty='$layid' order by gia asc");
+				} else {
+					$p->xemdssanpham("select * from sanpham order by gia asc");
+				}
+
+				?>
+			</div>
 
 		</div>
+        
 
 		<div id="footer">FOOTER</div>
 	</div>

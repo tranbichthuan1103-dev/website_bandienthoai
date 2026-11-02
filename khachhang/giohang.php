@@ -5,7 +5,7 @@ include("../classlogin/clslogin.php");
 
 // Bắt buộc đăng nhập mới xem được giỏ hàng
 if (!isset($_SESSION['idkh'])) {
-    header('location:../login/loginkhachhang.php');
+    header('location:../login/login.php');
     exit();
 }
 
@@ -65,9 +65,9 @@ $danhsach = $p->xemChiTietGiohang($idkh);
                 <tr>
                     <th>Hình</th>
                     <th>Tên sản phẩm</th>
-                    <th>Đơn giá</th>
+                    <th>Đơn giá (USD)</th>
                     <th>Số lượng</th>
-                    <th>Thành tiền</th>
+                    <th>Thành tiền (USD)</th>
                     <th>Xóa</th>
                 </tr>
                 <?php

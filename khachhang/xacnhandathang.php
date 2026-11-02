@@ -3,7 +3,7 @@ session_start();
 include("../class/classtmdt.php");
 
 if (!isset($_SESSION['idkh'])) {
-    header('location:../login/loginkhachhang.php');
+    header('location:../login/login.php');
     exit();
 }
 
@@ -28,7 +28,6 @@ if (isset($_POST['datHang'])) {
 
 $danhsach  = $p->xemChiTietGiohang($idkh);
 $khachhang = $p->layThongTinKhachHang($idkh);
-$TY_GIA    = 25000;
 ?>
 <!doctype html>
 <html>
@@ -69,9 +68,9 @@ $TY_GIA    = 25000;
                 <tr>
                     <th>Hình</th>
                     <th>Tên sản phẩm</th>
-                    <th>Đơn giá (VNĐ)</th>
+                    <th>Đơn giá (USD)</th>
                     <th>Số lượng</th>
-                    <th>Thành tiền (VNĐ)</th>
+                    <th>Thành tiền (USD)</th>
                 </tr>
                 <?php
                 $tongtien = 0;
@@ -82,13 +81,13 @@ $TY_GIA    = 25000;
                 <tr>
                     <td><img src="../img/<?php echo $item['hinh']; ?>" /></td>
                     <td><?php echo $item['tensp']; ?></td>
-                    <td><?php echo number_format($item['gia'] * $TY_GIA, 0, ',', '.'); ?> VNĐ</td>
+                    <td><?php echo number_format($item['gia'], 0, ',', '.'); ?> USD</td>
                     <td><?php echo $item['soluong']; ?></td>
-                    <td><?php echo number_format($thanhtien * $TY_GIA, 0, ',', '.'); ?> VNĐ</td>
+                    <td><?php echo number_format($thanhtien, 0, ',', '.'); ?> USD</td>
                 </tr>
                 <?php endforeach; ?>
             </table>
-            <p><b>Tổng cộng: <?php echo number_format($tongtien * $TY_GIA, 0, ',', '.'); ?> VNĐ</b></p>
+            <p><b>Tổng cộng: <?php echo number_format($tongtien, 0, ',', '.'); ?> USD</b></p>
 
             <form method="post" action="">
                 <p>

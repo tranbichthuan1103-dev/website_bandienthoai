@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['id']) && isset($_SESSION['user']) && isset($_SESSION['pass']) && isset($_SESSION['phanquyen'])) {
+if (isset($_SESSION['id']) && isset($_SESSION['user']) && isset($_SESSION['pass']) && isset($_SESSION['phanquyen']) && $_SESSION['phanquyen'] == 1) {
   require_once("../classlogin/clslogin.php");
   $q = new login();
   $q->confirmlogin($_SESSION['id'], $_SESSION['user'], $_SESSION['pass'], $_SESSION['phanquyen']);
@@ -8,8 +8,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user']) && isset($_SESSION['pass'
   header('location:../login/login.php');
   exit();
 }
-?>
-<?php
+
 require_once("../class/classtmdt.php");
 define('IN_ADMIN', true);
 $p = new csdltmdt();
@@ -19,39 +18,31 @@ $p = new csdltmdt();
 
 <head>
   <meta charset="utf-8">
-  <title>ADMIN</title>
-  <style type="text/css">
-    #nut {
-      text-align: center;
-    }
-  </style>
+  <title>TRANG QUẢN TRỊ</title>
 </head>
 
 <body>
-  <h2 align="center">QUẢN LÝ SẢN PHẨM</h2>
-
-  <div style="text-align:center; margin-bottom:20px;">
-    <a href="?page=ds">Danh sách SP</a> |
-    <a href="?page=them">Thêm SP</a> |
-    <a href="?page=dathang">Đặt hàng</a>
+  <div align="center" style="margin-top: 10px; margin-bottom: 20px;">
+    <a href="admin.php?page=sanpham">Quản lý sản phẩm</a> |
+    <a href="admin.php?page=dathang">Quản lý bán hàng</a> |
+    <a href="../login/logout.php">Đăng xuất</a>
   </div>
 
   <hr>
 
   <?php
-  $page = isset($_GET['page']) ? $_GET['page'] : 'ds';
+  $page = isset($_GET['page']) ? $_GET['page'] : 'sanpham';
 
   switch ($page) {
-    case 'them':
-      include("themsanpham.php");
-      break;
-
-    case 'ds':
-      include("danhsachsanpham.php");
-      break;
-
     case 'dathang':
       include("danhsachdathang.php");
+      break;
+
+    case 'sanpham':
+    case 'ds':
+    case 'them':
+    default:
+      include("danhsachsanpham.php");
       break;
   }
   ?>
